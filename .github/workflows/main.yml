@@ -1,32 +1,21 @@
-name: Trigger Workflow
+name: Access Previous Job Step Output
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Select the tag'
-        required: true
-        options: ${{ steps.get_tags.outputs.tags }}
+  push:
+    branches:
+      - main
 
 jobs:
-  trigger:
+  job1:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Get Tags
-        id: get_tags
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ github.token }}
-          script: |
-            const response = await octokit.git.listRefs({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              namespace: 'tags'
-            });
+      - name: Step 1
+        id: step1
+        run: echo "::set-output name=myOutput::Hello, World!"
 
-            const tags = response.data.map(tag => tag.ref.replace('refs/tags/', ''));
-            console.log(`::set-output name=tags::${JSON.stringify(tags)}`);
-      
-      - name: Trigger Workflow
-        run: echo "Running workflow with tag: ${{ github.event.inputs.tag }}"
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 2
+        run: echo "Previous step output: ${{ needs.job1.outputs.myOutput }}"
