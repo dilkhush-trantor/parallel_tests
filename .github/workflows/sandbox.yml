@@ -15,6 +15,7 @@ on:
       release:
         description: 'Select the tag'
         required: true
+        type: choice
         options: ${{ steps.get_tags.outputs.tags }}
 
 
