@@ -9,13 +9,13 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     steps:
-      - name: Step 1
-        id: step1
-        run: echo "::set-output name=myOutput::Hello, World!"
+    - name: Step 1
+      id: step1
+      run: echo "::set-output name=myOutput::Hello, World!"
 
   job2:
     needs: job1
     runs-on: ubuntu-latest
     steps:
-      - name: Step 2
-        run: echo "Previous step output: ${{ needs.job1.outputs.myOutput }}"
+    - name: Step 2
+      run: echo "Previous step output: ${{ needs.job1.outputs.myOutput }}"
