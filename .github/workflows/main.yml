@@ -1,9 +1,11 @@
 name: Access Previous Job Step Output
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Select Github Version"
+        required: true
 
 jobs:
   job1:
