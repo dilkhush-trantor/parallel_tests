@@ -6,7 +6,7 @@ on:
       tag:
         description: 'Select the tag'
         required: true
-        options: ${{ steps.get_tags.outputs.tagOptions }}
+        options: ${{ steps.get_tags.outputs.tags }}
 
 jobs:
   trigger:
@@ -25,5 +25,8 @@ jobs:
               namespace: 'tags'
             });
 
-            const tagOptions = response.data.map(tag => tag.ref.replace('refs/tags/', ''));
-            console.log(`::set-output name=tagOptions::${JSON.stringify(tagOptions)}`);
+            const tags = response.data.map(tag => tag.ref.replace('refs/tags/', ''));
+            console.log(`::set-output name=tags::${JSON.stringify(tags)}`);
+      
+      - name: Trigger Workflow
+        run: echo "Running workflow with tag: ${{ github.event.inputs.tag }}"
