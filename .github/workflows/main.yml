@@ -23,4 +23,7 @@ jobs:
       run: |
         # Read the tags from the file and store them in an array
         echo "::set-output name=tags::$(cat tags.txt | tr '\n' ',')"
+      
+    - name: Trigger Workflow
+      run: echo "Running workflow with tag: ${{ inputs.tag }}"
 
