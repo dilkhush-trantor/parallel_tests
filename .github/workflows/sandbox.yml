@@ -12,10 +12,9 @@ on:
           - development
           - canary
           - sandbox
-      tag:
-        description: 'Select the tag'
+      release:
+        description: 'Select the release'
         required: true
-        type: choice
 
 jobs:
   deploy:
@@ -27,6 +26,6 @@ jobs:
     - name: Selected Version and Environment
       run: |
         environment=${{github.event.inputs.environment}}
-        version=${{github.event.inputs.tag}}
+        version=${{github.event.inputs.release}}
         echo "environment=$environment" >> $GITHUB_OUTPUT
         echo "version=$version" >> $GITHUB_OUTPUT
