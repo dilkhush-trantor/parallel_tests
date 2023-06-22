@@ -6,8 +6,7 @@ on:
       tag:
         description: 'Select the tag'
         required: true
-        type: choice
-        options: ${{ steps.get_tags.outputs.tags }}
+        options: ${{ steps.get_tags.outputs.tagOptions }}
 
 jobs:
   trigger:
@@ -18,15 +17,13 @@ jobs:
         id: get_tags
         uses: actions/github-script@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ github.token }}
           script: |
-            const { data: tags } = await octokit.git.listRefs({
+            const response = await octokit.git.listRefs({
               owner: context.repo.owner,
               repo: context.repo.repo,
               namespace: 'tags'
             });
-            const tagOptions = tags.map(tag => tag.ref.replace('refs/tags/', ''));
-            console.log(`::set-output name=tags::${JSON.stringify(tagOptions)}`);
-      
-      - name: Trigger Workflow
-        run: echo "Running workflow with tag: ${{ github.event.inputs.tag }}"
+
+            const tagOptions = response.data.map(tag => tag.ref.replace('refs/tags/', ''));
+            console.log(`::set-output name=tagOptions::${JSON.stringify(tagOptions)}`);
