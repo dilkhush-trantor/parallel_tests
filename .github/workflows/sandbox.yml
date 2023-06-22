@@ -13,8 +13,10 @@ on:
           - canary
           - sandbox
       release:
-        description: 'Select the release'
+        description: 'Select the tag'
         required: true
+        options: ${{ steps.get_tags.outputs.tags }}
+
 
 jobs:
   deploy:
@@ -23,6 +25,11 @@ jobs:
     environment:
       name: ${{ github.event.inputs.environment }}
     steps:
+    - name: Get Tags
+      id: get_tags
+      run: |
+        tags=$(git ls-remote --tags origin | awk -F/ '{print $3}' | sed 's/\^{}//')
+        echo "::set-output name=tags::$tags"
     - name: Selected Version and Environment
       run: |
         environment=${{github.event.inputs.environment}}
