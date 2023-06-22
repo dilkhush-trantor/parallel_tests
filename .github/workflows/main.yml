@@ -12,17 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Fetch Tags
-        id: fetch_tags
-        run: |
-          # Fetch repository tags and store them in a file
-          git ls-remote --tags origin | awk -F/ '{print $3}' | sed 's/\^{}//' > tags.txt
+    - name: Fetch Tags
+      id: fetch_tags
+      run: |
+        # Fetch repository tags and store them in a file
+        git ls-remote --tags origin | awk -F/ '{print $3}' | sed 's/\^{}//' > tags.txt
 
-      - name: Read Tags
-        id: read_tags
-        run: |
-          # Read the tags from the file and store them in an array
-          echo "::set-output name=tags::$(cat tags.txt | tr '\n' ',')"
+    - name: Read Tags
+      id: read_tags
+      run: |
+        # Read the tags from the file and store them in an array
+        echo "::set-output name=tags::$(cat tags.txt | tr '\n' ',')"
 
-      - name: Trigger Workflow
-        run: echo "Running workflow with tag: ${{ github.event.inputs.tag }}"
+    - name: Trigger Workflow
+      run: echo "Running workflow with tag: ${{ github.event.inputs.tag }}"
